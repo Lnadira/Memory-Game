@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var card = document.createElement('img');
       card.setAttribute('src', 'images/castle.png');
       card.setAttribute('data-id', i);
+      card.classList.add('hidden');
       card.addEventListener('click', flipCard);
       board.appendChild(card);
     }
@@ -86,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       cards[optionOneId].setAttribute('src', 'images/castle.png');
       cards[optionTwoId].setAttribute('src', 'images/castle.png');
+      cards[optionOneId].classList.add('hidden');
+      cards[optionTwoId].classList.add('hidden');
       alert('Sorry, try again');
     }
     cardsChosen = [];
@@ -102,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cardsChosen.push(cardArray[cardId].name);
     cardsChosenId.push(cardId);
     this.setAttribute('src', cardArray[cardId].img)
+    this.classList.remove('hidden');
     if (cardsChosen.length === 2) {
       setTimeout(checkForMatch, 500)
     }
