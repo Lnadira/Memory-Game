@@ -9,13 +9,18 @@
 
 <body>
   <link href="https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
   <div class="container">
-    <h1>Disney-esque Memory Game!</h1>
 
-    <h3>Score: <span id="score"></span></h3>
+    <div class="stats">
+      <h3>Score: <span id="score">0</span></h3>
+      <button id="reset-button" title="New Game"><i class="fas fa-sync-alt"></i></button>
+    </div>
 
     <div class="board"></div>
+
+
   </div>
 
 </body>

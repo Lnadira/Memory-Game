@@ -52,16 +52,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  cardArray.sort(() => 0.5 - Math.random());
+  const resetBtn = document.querySelector('#reset-button');
+  resetBtn.addEventListener('click', () => {
+    if(confirm("Start a new game?")) {
+      var element = document.querySelectorAll('img');
+      Array.prototype.forEach.call(element, node => {
+        node.parentNode.removeChild(node);
+      })
+      newGame();
+    };
+  });
 
-  const board = document.querySelector('.board');
-  const scoreDisplay = document.querySelector('#score')
-  var cardsChosen = [];
-  var cardsChosenId = [];
-  var cardsWon = [];
+  function newGame() {
 
-  //create the board
-  function createBoard() {
+    cardArray.sort(() => 0.5 - Math.random());
+
+    const board = document.querySelector('.board');
+    const scoreDisplay = document.querySelector('#score')
+    score = 0;
+    scoreDisplay.textContent = score;
+    var cardsChosen = [];
+    var cardsChosenId = [];
+    var cardsWon = [];
+
+    //create the board
     for (let i = 0; i < cardArray.length; i++) {
       var card = document.createElement('img');
       card.setAttribute('src', 'images/castle.png');
@@ -70,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
       card.addEventListener('click', flipCard);
       board.appendChild(card);
     }
-  }
 
   //check for matches
   function checkForMatch() {
@@ -78,22 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const optionOneId = cardsChosenId[0];
     const optionTwoId = cardsChosenId[1];
     if (cardsChosen[0] === cardsChosen[1]) {
-      alert('You found a match');
-      cards[optionOneId].setAttribute('src', 'images/disney.png');
-      cards[optionTwoId].setAttribute('src', 'images/disney.png');
+      //alert('You found a match');
+      score++;
+      cards[optionOneId].setAttribute('src', 'images/castle.png');
+      cards[optionTwoId].setAttribute('src', 'images/castle.png');
       cards[optionOneId].removeEventListener('click', flipCard);
       cards[optionTwoId].removeEventListener('click', flipCard);
+      cards[optionOneId].style.filter = "hue-rotate(170deg) brightness(270%) saturate(150%)";
+      cards[optionTwoId].style.filter = "hue-rotate(170deg) brightness(270%) saturate(150%)";
       cardsWon.push(cardsChosen);
     } else {
       cards[optionOneId].setAttribute('src', 'images/castle.png');
       cards[optionTwoId].setAttribute('src', 'images/castle.png');
       cards[optionOneId].classList.add('hidden');
       cards[optionTwoId].classList.add('hidden');
-      alert('Sorry, try again');
+      //alert('Sorry, try again');
     }
     cardsChosen = [];
     cardsChosenId = [];
-    scoreDisplay.textContent = cardsWon.length;
+    scoreDisplay.textContent = score;
     if (cardsWon.length === cardArray.length/2) {
       scoreDisplay.textContent = 'Congratulations! You found them all!'
     }
@@ -102,14 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
   //flip your card
   function flipCard() {
     var cardId = this.getAttribute('data-id');
-    cardsChosen.push(cardArray[cardId].name);
-    cardsChosenId.push(cardId);
-    this.setAttribute('src', cardArray[cardId].img)
-    this.classList.remove('hidden');
+    if(!cardsChosenId.includes(cardId)) {
+      cardsChosen.push(cardArray[cardId].name);
+      cardsChosenId.push(cardId);
+      this.setAttribute('src', cardArray[cardId].img)
+      this.classList.remove('hidden');
+    } else {
+      alert("You cannot choose the same card!");
+    }
+
     if (cardsChosen.length === 2) {
       setTimeout(checkForMatch, 500)
     }
   }
+}
 
-  createBoard();
+  newGame();
 })
