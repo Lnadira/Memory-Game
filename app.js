@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.querySelector('#reset-button');
   resetBtn.addEventListener('click', () => {
     if(confirm("Start a new game?")) {
-      var element = document.querySelectorAll('img');
+      var element = document.querySelectorAll('.flip-card');
       Array.prototype.forEach.call(element, node => {
         node.parentNode.removeChild(node);
       })
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function newGame() {
-
+    //shuffle cards
     cardArray.sort(() => 0.5 - Math.random());
 
     const board = document.querySelector('.board');
@@ -75,36 +75,52 @@ document.addEventListener('DOMContentLoaded', () => {
     var cardsChosenId = [];
     var cardsWon = [];
 
+
     //create the board
     for (let i = 0; i < cardArray.length; i++) {
-      var card = document.createElement('img');
-      card.setAttribute('src', 'images/castle.png');
+      var space = document.createElement('div');
+      space.classList.add('flip-card');
+      board.appendChild(space);
+      space = document.querySelectorAll('.flip-card')[i];
+
+      var card = document.createElement('div');
+      card.classList.add('card');
       card.setAttribute('data-id', i);
-      card.classList.add('hidden');
+      space.appendChild(card);
+      card = document.querySelectorAll('.card')[i];
       card.addEventListener('click', flipCard);
-      board.appendChild(card);
+
+      var div = document.createElement('div');
+      var front = document.createElement('img');
+      front.setAttribute('src', 'images/castle.png');
+      front.classList.add('card-face', 'front');
+      card.appendChild(div);
+      div.appendChild(front);
+
+      var back = document.createElement('img');
+      back.setAttribute('src', cardArray[i].img);
+      back.classList.add('card-face', 'back');
+      card.appendChild(back);
     }
 
   //check for matches
   function checkForMatch() {
-    var cards = document.querySelectorAll('img');
+    var cards = document.querySelectorAll('.card');
     const optionOneId = cardsChosenId[0];
     const optionTwoId = cardsChosenId[1];
     if (cardsChosen[0] === cardsChosen[1]) {
       //alert('You found a match');
       score++;
-      cards[optionOneId].setAttribute('src', 'images/castle.png');
-      cards[optionTwoId].setAttribute('src', 'images/castle.png');
+      cards[optionOneId].querySelector('img').setAttribute('src', 'images/disneytr.png');
+      cards[optionOneId].classList.toggle('is-flipped');
+      cards[optionTwoId].querySelector('img').setAttribute('src', 'images/disneytr.png');
+      cards[optionTwoId].classList.toggle('is-flipped');
       cards[optionOneId].removeEventListener('click', flipCard);
       cards[optionTwoId].removeEventListener('click', flipCard);
-      cards[optionOneId].style.filter = "hue-rotate(170deg) brightness(270%) saturate(150%)";
-      cards[optionTwoId].style.filter = "hue-rotate(170deg) brightness(270%) saturate(150%)";
       cardsWon.push(cardsChosen);
     } else {
-      cards[optionOneId].setAttribute('src', 'images/castle.png');
-      cards[optionTwoId].setAttribute('src', 'images/castle.png');
-      cards[optionOneId].classList.add('hidden');
-      cards[optionTwoId].classList.add('hidden');
+      cards[optionOneId].classList.toggle('is-flipped');
+      cards[optionTwoId].classList.toggle('is-flipped');
       //alert('Sorry, try again');
     }
     cardsChosen = [];
@@ -117,21 +133,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //flip your card
   function flipCard() {
+
     var cardId = this.getAttribute('data-id');
     if(!cardsChosenId.includes(cardId)) {
+      this.classList.toggle('is-flipped');
       cardsChosen.push(cardArray[cardId].name);
       cardsChosenId.push(cardId);
-      this.setAttribute('src', cardArray[cardId].img)
-      this.classList.remove('hidden');
     } else {
       alert("You cannot choose the same card!");
     }
-
+    console.log(cardsChosen);
+    console.log(cardsChosenId);
     if (cardsChosen.length === 2) {
-      setTimeout(checkForMatch, 500)
+      setTimeout(checkForMatch, 1000)
     }
   }
-}
+  }
 
   newGame();
 })
