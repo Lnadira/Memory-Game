@@ -93,13 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
       var div = document.createElement('div');
       var front = document.createElement('img');
       front.setAttribute('src', 'images/castle.png');
-      front.classList.add('card-face', 'front');
+      front.classList.add('card-face', 'shadow', 'front');
       card.appendChild(div);
       div.appendChild(front);
 
       var back = document.createElement('img');
       back.setAttribute('src', cardArray[i].img);
-      back.classList.add('card-face', 'back');
+      back.classList.add('card-face', 'shadow', 'back');
       card.appendChild(back);
     }
 
@@ -111,10 +111,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardsChosen[0] === cardsChosen[1]) {
       //alert('You found a match');
       score++;
-      cards[optionOneId].querySelector('img').setAttribute('src', 'images/disneytr.png');
+      var cardOne = cards[optionOneId].querySelector('img');
+      cardOne.setAttribute('src', 'images/disneytr.png');
+      cardOne.classList.remove('front', 'shadow');
       cards[optionOneId].classList.toggle('is-flipped');
-      cards[optionTwoId].querySelector('img').setAttribute('src', 'images/disneytr.png');
+
+      var cardTwo = cards[optionTwoId].querySelector('img');
+      cardTwo.setAttribute('src', 'images/disneytr.png');
+      cardTwo.classList.remove('front', 'shadow');
       cards[optionTwoId].classList.toggle('is-flipped');
+
       cards[optionOneId].removeEventListener('click', flipCard);
       cards[optionTwoId].removeEventListener('click', flipCard);
       cardsWon.push(cardsChosen);
